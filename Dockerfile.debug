@@ -61,6 +61,21 @@ RUN apt-get -q -y update && \
     apt-get -q -y install \
 # DO NOT REMOVE THIS LABEL: this is used for VS Code automation
     # __torizon_packages_dev_start__
+	    git:arm64 \
+	    build-essential:arm64 \
+	    cmake:arm64 \
+	    net-tools:arm64 \
+	    v4l-utils:arm64 \
+	    ffmpeg:arm64 \
+	    nano:arm64 \
+	    psmisc:arm64 \
+	    libgstreamer1.0-dev:arm64 \
+	    libgstreamer-plugins-base1.0-dev:arm64 \
+	    gstreamer1.0-plugins-good:arm64 \
+	    gstreamer1.0-plugins-bad:arm64 \
+	    gstreamer1.0-plugins-ugly:arm64 \
+	    gstreamer1.0-libav:arm64 \
+	    gstreamer1.0-tools:arm64 \
     # __torizon_packages_dev_end__
 # DO NOT REMOVE THIS LABEL: this is used for VS Code automation
     && \

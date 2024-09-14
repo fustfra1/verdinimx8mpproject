@@ -5,9 +5,35 @@ services:
       context: .
       dockerfile: Dockerfile.debug
     image: ${LOCAL_REGISTRY}:5002/secondmipivc-debug:${TAG}
+    privileged: true 
+    environment:
+     - ACCEPT_FSL_EULA=1
     ports:
       - ${DEBUG_SSH_PORT}:${DEBUG_SSH_PORT}
       - ${DEBUG_PORT1}:${DEBUG_PORT1}
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /var/run/dbus
+        target: /var/run/dbus
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /sys
+        target: /sys
+    devices:
+      - /dev/video0:/dev/video0
+      - /dev/video1:/dev/video1
+      - /dev/video2:/dev/video2
+      - /dev/video3:/dev/video3
+    device_cgroup_rules:
+      - "c 226:* rmw"
+      - "c 199:* rmw"
+      - "c 81:* rwm"
+
 
   secondmipivc:
     build:
