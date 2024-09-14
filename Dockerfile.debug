@@ -82,6 +82,19 @@ RUN apt-get -q -y update && \
     apt-get clean && apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
 
+# Clone the repository and build the project
+RUN git clone --branch develop https://github.com/pmliquify/v4l2-test.git
+
+WORKDIR /v4l2-test
+
+RUN mkdir build && \
+    cd build && \
+    cmake .. && \
+    cmake --build . && \
+    cmake --install .
+# Change back to the original directory
+WORKDIR /
+
 # Create virtualenv
 RUN python3 -m venv ${APP_ROOT}/.venv --system-site-packages
 
