@@ -1,29 +1,69 @@
 version: "3.9"
+
 services:
+  weston:
+    image: torizon/weston-vivante:3  # Adjust the image to the correct version
+    environment:
+      - ACCEPT_FSL_EULA=1
+    network_mode: host
+    cap_add:
+      - CAP_SYS_TTY_CONFIG
+      - CAP_SYS_ADMIN
+    volumes:
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+    device_cgroup_rules:
+      # Allow access to /dev/tty
+      - 'c 4:* rmw'
+      # Allow access to /dev/input devices
+      - 'c 13:* rmw'
+      # Allow access to VPU
+      - 'c 199:* rmw'
+      # Allow access to /dev/dri devices
+      - 'c 226:* rmw'
+    command: ["--developer", "--tty=/dev/tty7"] 
+
+
   secondmipivc-debug:
     build:
       context: .
       dockerfile: Dockerfile.debug
     image: ${LOCAL_REGISTRY}:5002/secondmipivc-debug:${TAG}
-    privileged: true 
     environment:
-     - ACCEPT_FSL_EULA=1
+      - ACCEPT_FSL_EULA=1
+      - XDG_RUNTIME_DIR=/tmp/1000-runtime-dir
+    depends_on:
+      - weston
+    # network_mode: host
+    privileged: true
     ports:
       - ${DEBUG_SSH_PORT}:${DEBUG_SSH_PORT}
       - ${DEBUG_PORT1}:${DEBUG_PORT1}
+    cap_add:
+      - CAP_SYS_ADMIN
     volumes:
-        - type: bind
-          source: /tmp
-          target: /tmp
-        - type: bind
-          source: /dev
-          target: /dev
-        - type: bind
-          source: /run/udev
-          target: /run/udev
-        - type: bind
-          source: /sys
-          target: /sys
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+      - type: bind
+        source: /sys
+        target: /sys
+      - type: bind
+        source: /tmp/1000-runtime-dir
+        target: /tmp/1000-runtime-dir
     devices:
       - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1
@@ -34,9 +74,34 @@ services:
       - "c 199:* rmw"
       - "c 81:* rwm"
 
-
   secondmipivc:
     build:
       context: .
       dockerfile: Dockerfile
     image: ${DOCKER_LOGIN}/secondmipivc:${TAG}
+    depends_on:
+      - weston
+    network_mode: host
+    privileged: true
+    volumes:
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+      - type: bind
+        source: /sys
+        target: /sys
+    devices:
+      - /dev/video0:/dev/video0
+      - /dev/video1:/dev/video1
+      - /dev/video2:/dev/video2
+      - /dev/video3:/dev/video3
+    device_cgroup_rules:
+      - "c 226:* rmw"
+      - "c 199:* rmw"
+      - "c 81:* rwm"
