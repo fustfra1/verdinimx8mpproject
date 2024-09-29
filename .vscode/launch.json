@@ -57,7 +57,8 @@
                 "remoteRoot": "${config:torizon_app_root}"
                 }
             ],
-            "preLaunchTask": "deploy-torizon-arm64"
+            "preLaunchTask": "deploy-torizon-arm64",
+            "logToFile": true
         }
     ]
 }

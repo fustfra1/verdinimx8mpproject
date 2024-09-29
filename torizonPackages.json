@@ -21,6 +21,7 @@
     "libdrm2",
     "libdrm-dev",
     "libtinyxml2-9",
-    "libv4l-dev"
+    "libv4l-dev",
+    "libjsoncpp-dev"
   ]
 }

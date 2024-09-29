@@ -82,6 +82,7 @@ RUN apt-get -q -y update && \
 	    libdrm-dev:arm64 \
 	    libtinyxml2-9:arm64 \
 	    libv4l-dev:arm64 \
+	    libjsoncpp-dev:arm64 \
     # __torizon_packages_dev_end__
 # DO NOT REMOVE THIS LABEL: this is used for VS Code automation
     && \

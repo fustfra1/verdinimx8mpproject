@@ -39,7 +39,6 @@ services:
       - ACCEPT_FSL_EULA=1
       - XDG_RUNTIME_DIR=/tmp/1000-runtime-dir
       - DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
-      # - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/custom_libs
     depends_on:
       - weston
     network_mode: host
@@ -69,27 +68,6 @@ services:
       - type: bind
         source: /var/run/dbus
         target: /var/run/dbus  # Mounted D-Bus¨
-      # - type: bind
-      #   source: /usr/lib/libmedia_server.so  # Bind-mount /usr/lib from the host
-      #   target: /usr/lib/libmedia_server.so  
-      # - type: bind
-      #   source: /usr/lib/libcam_device.so  # Bind-mount /usr/lib from the host
-      #   target: /usr/lib/libcam_device.so
-      # - type: bind
-      #   source: /usr/lib/libjsoncpp.so.21  # Bind-mount /usr/lib from the host
-      #   target: /usr/lib/libjsoncpp.so.21
-      # - type: bind
-      #   source: /usr/lib/libdewarp_hal.so  # Bind-mount /usr/lib from the host
-      #   target: /usr/lib/libdewarp_hal.so
-      # - type: bind
-      #   source: /usr/lib/libcam_engine.so  # Bind-mount /usr/lib from the host
-      #   target: /usr/lib/libcam_engine.so
-      # - type: bind
-      #   source: /usr/lib/libcameric_drv.so  # Bind-mount /usr/lib from the host
-      #   target: /usr/lib/libcameric_drv.so
-      # - type: bind
-      #   source: /usr/lib
-      #   target: /custom_libs
     devices:
       - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1
