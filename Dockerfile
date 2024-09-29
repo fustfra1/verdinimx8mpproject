@@ -48,6 +48,7 @@ RUN . ${APP_ROOT}/.venv/bin/activate && \
 # configuration defined in settings.json
 COPY ./src ${APP_ROOT}/src
 
+
 WORKDIR ${APP_ROOT}
 
 ENV APP_ROOT=${APP_ROOT}

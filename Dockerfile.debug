@@ -76,6 +76,12 @@ RUN apt-get -q -y update && \
 	    gstreamer1.0-plugins-ugly:arm64 \
 	    gstreamer1.0-libav:arm64 \
 	    gstreamer1.0-tools:arm64 \
+	    i2c-tools:arm64 \
+	    python3:arm64 \
+	    libdrm2:arm64 \
+	    libdrm-dev:arm64 \
+	    libtinyxml2-9:arm64 \
+	    libv4l-dev:arm64 \
     # __torizon_packages_dev_end__
 # DO NOT REMOVE THIS LABEL: this is used for VS Code automation
     && \
@@ -94,6 +100,13 @@ RUN mkdir build && \
     cmake --install .
 # Change back to the original directory
 WORKDIR /
+
+# Copy binaries ISP FFU
+COPY ./bin /opt/imx8-isp/bin
+RUN chmod +x /opt/imx8-isp/bin/*.sh
+# Test Script ISP FFU
+COPY ./test.sh /usr/local/bin/test.sh
+RUN chmod +x /usr/local/bin/test.sh
 
 # Create virtualenv
 RUN python3 -m venv ${APP_ROOT}/.venv --system-site-packages
@@ -128,3 +141,8 @@ RUN rm -r /etc/ssh/ssh*key && \
     dpkg-reconfigure openssh-server
 
 CMD [ "/usr/sbin/sshd", "-D" ]
+
+# ENV container docker
+# STOPSIGNAL SIGRTMIN+3
+# CMD ["/usr/sbin/init"]
+# RUN systemctl enable ssh
