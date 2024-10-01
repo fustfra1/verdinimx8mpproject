@@ -62,12 +62,12 @@ services:
       - type: bind
         source: /run/udev
         target: /run/udev
-      - type: bind
-        source: /tmp/1000-runtime-dir
-        target: /tmp/1000-runtime-dir
-      - type: bind
-        source: /var/run/dbus
-        target: /var/run/dbus  # Mounted D-Bus¨
+      # - type: bind
+      #   source: /tmp/1000-runtime-dir
+      #   target: /tmp/1000-runtime-dir
+      # - type: bind
+      #   source: /var/run/dbus
+      #   target: /var/run/dbus  # Mounted D-Bus¨
     devices:
       - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1
@@ -105,9 +105,9 @@ services:
       - type: bind
         source: /sys
         target: /sys
-      - type: bind
-        source: /var/run/dbus
-        target: /var/run/dbus  # Mounted D-Bus
+      # - type: bind
+      #   source: /var/run/dbus
+      #   target: /var/run/dbus  # Mounted D-Bus
     devices:
       - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1

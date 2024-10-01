@@ -590,7 +590,7 @@
             <flicker.period>1</flicker.period>
             <damping.over>0.2</damping.over>
             <damping.under>0.30000001</damping.under>
-            <set.point>80</set.point>
+            <set.point>110</set.point>
             <tolerance>3</tolerance>
             <weight>[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]</weight>
         </ae>
