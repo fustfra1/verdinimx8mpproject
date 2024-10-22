@@ -71,35 +71,41 @@ RUN apt-get -q -y update && \
 	    psmisc:arm64 \
 	    libgstreamer1.0-dev:arm64 \
 	    libgstreamer-plugins-base1.0-dev:arm64 \
+	    libgstreamer-plugins-bad1.0-dev:arm64 \
+	    gstreamer1.0-plugins-base:arm64 \
 	    gstreamer1.0-plugins-good:arm64 \
 	    gstreamer1.0-plugins-bad:arm64 \
 	    gstreamer1.0-plugins-ugly:arm64 \
 	    gstreamer1.0-libav:arm64 \
 	    gstreamer1.0-tools:arm64 \
 	    i2c-tools:arm64 \
-	    python3:arm64 \
+	    python3-dev:arm64 \
 	    libdrm2:arm64 \
 	    libdrm-dev:arm64 \
 	    libtinyxml2-9:arm64 \
 	    libv4l-dev:arm64 \
 	    libjsoncpp-dev:arm64 \
+	    libcairo2-dev:arm64 \
+	    libgirepository1.0-dev:arm64 \
+	    pkg-config:arm64 \
     # __torizon_packages_dev_end__
 # DO NOT REMOVE THIS LABEL: this is used for VS Code automation
     && \
     apt-get clean && apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
 
-# Clone the repository and build the project
-RUN git clone --branch develop https://github.com/pmliquify/v4l2-test.git
+# # Clone the repository and build the project
+# RUN git clone --branch develop https://github.com/pmliquify/v4l2-test.git
 
-WORKDIR /v4l2-test
+# # Hat nicht mehr funktioniert, ev. muss OpenCV installiert sein
+# WORKDIR /v4l2-test
 
-RUN mkdir build && \
-    cd build && \
-    cmake .. && \
-    cmake --build . && \
-    cmake --install .
-# Change back to the original directory
+# RUN mkdir build && \
+#     cd build && \
+#     cmake .. && \
+#     cmake --build . && \
+#     cmake --install .
+# # Change back to the original directory
 WORKDIR /
 
 # Copy binaries ISP FFU

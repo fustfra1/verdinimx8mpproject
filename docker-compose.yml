@@ -68,6 +68,10 @@ services:
       # - type: bind
       #   source: /var/run/dbus
       #   target: /var/run/dbus  # Mounted D-Bus¨
+      # - type: bind
+      #   source: /var/run/dbus/system_bus_socket
+      #   target: /var/run/dbus/system_bus_socket
+
     devices:
       - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1

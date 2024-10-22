@@ -1,1 +1,4 @@
 debugpy
+opencv-python
+pycairo 
+PyGObject
