@@ -9,6 +9,7 @@
     "ffmpeg",
     "nano",
     "psmisc",
+    "gpiod",
     "libgstreamer1.0-dev",
     "libgstreamer-plugins-base1.0-dev",
     "libgstreamer-plugins-bad1.0-dev",

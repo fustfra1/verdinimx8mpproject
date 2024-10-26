@@ -83,6 +83,7 @@ services:
       - "c 199:* rmw"
       - "c 81:* rmw"
       - "c 89:* rmw"
+      - "c 254:* rmw" # GPIO
     # init: true
 
   secondmipivc:
@@ -120,4 +121,6 @@ services:
     device_cgroup_rules:
       - "c 226:* rmw"
       - "c 199:* rmw"
-      - "c 81:* rwm"
+      - "c 81:* rmw"
+      - "c 89:* rmw"
+      - "c 254:* rmw" # GPIO

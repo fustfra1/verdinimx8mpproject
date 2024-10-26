@@ -1,0 +1,57 @@
+import cv2
+
+def main():
+    # GStreamer pipeline for capturing frames
+    capture_pipeline = (
+        'v4l2src device=/dev/video2 ! '
+        'video/x-raw,format=YUY2,width=4032,height=3040 ! '
+        'videoconvert ! '
+        'appsink'
+    )
+
+    # GStreamer pipeline for displaying frames
+    display_pipeline = (
+        'appsrc ! '
+        'videoconvert ! '
+        'waylandsink'
+    )
+
+    # OpenCV VideoCapture for capturing frames
+    cap = cv2.VideoCapture("v4l2src device="+str('/dev/video2')+" ! video/x-raw, format=YUY2, width="+str(4032)+", height="+str(3040)+" ! appsink", cv2.CAP_GSTREAMER)
+
+    # cap = cv2.VideoCapture(capture_pipeline, cv2.CAP_GSTREAMER)
+    if not cap.isOpened():
+        print("Error: Unable to open capture pipeline.")
+        return
+
+    # OpenCV VideoWriter for displaying frames
+    out = cv2.VideoWriter(display_pipeline, cv2.CAP_GSTREAMER, 0, 30, (4032, 3040), True)
+    if not out.isOpened():
+        print("Error: Unable to open display pipeline.")
+        return
+
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                print("Error: Failed to read frame from capture pipeline.")
+                break
+
+            # Process the frame (convert to grayscale)
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            processed_frame = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+
+            # Write the processed frame to the display pipeline
+            out.write(processed_frame)
+
+            # Exit on 'q' key press (if display is set up)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+    finally:
+        cap.release()
+        out.release()
+        cv2.destroyAllWindows()
+
+if __name__ == '__main__':
+    main()
