@@ -19,6 +19,7 @@ ARG DEBUG_SSH_PORT=
 ##
 ARG SSHUSERNAME=
 
+
 ##
 # Directory of the application inside container
 ##
@@ -116,15 +117,32 @@ RUN chmod +x /opt/imx8-isp/bin/*.sh
 COPY ./test.sh /usr/local/bin/test.sh
 RUN chmod +x /usr/local/bin/test.sh
 
-# Create virtualenv
-RUN python3 -m venv ${APP_ROOT}/.venv --system-site-packages
+# CREATE VIRTUAL ENVIRONMENT ---------------------------------------------------
+RUN python3 -m venv ${APP_ROOT}/.venv
 
-# Install pip packages on venv
+# COPY PIP REQUIREMENTS FILE ---------------------------------------------------
 COPY requirements-debug.txt /requirements-debug.txt
-RUN . ${APP_ROOT}/.venv/bin/activate && \
-    pip3 install --upgrade pip && pip3 install -r requirements-debug.txt && \
-    rm requirements-debug.txt && \
-    chown -R ${SSHUSERNAME}:${SSHUSERNAME} ${APP_ROOT}
+
+# INSTALL PIP REQUIREMENTS IN THE VIRTUAL ENVIRONMENT -------------------------
+RUN set -ex && \
+    . ${APP_ROOT}/.venv/bin/activate && \
+    pip install --upgrade pip setuptools wheel && \
+    pip install -r /requirements-debug.txt && \
+    rm /requirements-debug.txt
+
+# COPY AND INSTALL OPENCV WHEEL FILE -------------------------------------------
+# Copy the pre-built OpenCV wheel from your local system to the Docker image
+COPY ./opencv-wheels/opencv_python*.whl /tmp/
+
+# Activate the virtual environment and install the OpenCV wheel
+RUN set -ex && \
+    . ${APP_ROOT}/.venv/bin/activate && \
+    pip install /tmp/opencv_python*.whl && \
+    rm /tmp/opencv_python*.whl
+
+# CHANGE OWNERSHIP TO NON-ROOT USER --------------------------------------------
+RUN chown -R ${SSHUSERNAME}:${SSHUSERNAME} ${APP_ROOT}
+
 
 # ⚠️ DEBUG PURPOSES ONLY!!
 # THIS CONFIGURES AN INSECURE SSH CONNECTION
