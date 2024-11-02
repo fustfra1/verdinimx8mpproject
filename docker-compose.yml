@@ -30,6 +30,46 @@ services:
       - 'c 226:* rmw'
     command: ["--developer", "--tty=/dev/tty7"] 
 
+  bluetooth-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.bluetooth-server
+    image: ${LOCAL_REGISTRY}:5002/bluetooth-server:${TAG}
+    environment:
+      - DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+      - ACCEPT_FSL_EULA=1
+    network_mode: host
+    # depends_on:
+      # - weston
+    ports:
+      - ${DEBUG_SSH_PORT}:${DEBUG_SSH_PORT}
+      - ${DEBUG_PORT1}:${DEBUG_PORT1}
+    cap_add:
+      - CAP_SYS_ADMIN
+      - CAP_NET_ADMIN  # If needed for network configurations
+    volumes:
+      - type: bind
+        source: /var/run/dbus/system_bus_socket
+        target: /var/run/dbus/system_bus_socket
+      - type: bind
+        source: /dev
+        target: /dev
+      - type: bind
+        source: /tmp
+        target: /tmp
+      - type: bind
+        source: /run/udev
+        target: /run/udev
+    device_cgroup_rules:
+      # Allow access to /dev/tty
+      - 'c 4:* rmw'
+      # Allow access to /dev/input devices
+      - 'c 13:* rmw'
+    # devices:
+      # - /dev/bus/usb:/dev/bus/usb  # If your Bluetooth hardware requires USB access
+    # Additional configurations as needed
+
+
   secondmipivc-debug:
     build:
       context: .
@@ -41,6 +81,7 @@ services:
       - DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
     depends_on:
       - weston
+      - bluetooth-server
     network_mode: host
     # privileged: true
     ports:
@@ -71,7 +112,6 @@ services:
       # - type: bind
       #   source: /var/run/dbus/system_bus_socket
       #   target: /var/run/dbus/system_bus_socket
-
     devices:
       - /dev/video0:/dev/video0
       - /dev/video1:/dev/video1
@@ -124,3 +164,6 @@ services:
       - "c 81:* rmw"
       - "c 89:* rmw"
       - "c 254:* rmw" # GPIO
+
+
+  
