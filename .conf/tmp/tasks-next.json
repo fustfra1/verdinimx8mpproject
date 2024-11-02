@@ -1298,8 +1298,7 @@
                 "DEBUG_SSH_PORT=${config:torizon_debug_ssh_port}",
                 "--build-arg",
                 "GPU=${config:torizon_gpu}",
-                "secondmipivc-debug",
-                "bluetooth-server"
+                "secondmipivc-debug"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -1693,8 +1692,7 @@
                 "docker",
                 "compose",
                 "push",
-                "secondmipivc-debug",
-                "bluetooth-server"
+                "secondmipivc-debug"
             ],
             "dependsOrder": "sequence",
             "problemMatcher": "$msCompile",
@@ -1801,8 +1799,7 @@
                 "docker",
                 "compose",
                 "pull",
-                "secondmipivc-debug",
-                "bluetooth-server"
+                "secondmipivc-debug"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -1949,8 +1946,7 @@
                 "torizon",
                 "up",
                 "-d",
-                "secondmipivc-debug",
-                "bluetooth-server"
+                "secondmipivc-debug"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [

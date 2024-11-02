@@ -1,0 +1,91 @@
+# ARGUMENTS --------------------------------------------------------------------
+##
+# Board architecture
+##
+ARG IMAGE_ARCH=
+
+##
+# Base container version
+##
+ARG BASE_VERSION=3.3.1-bookworm
+
+##
+# Debug port
+##
+ARG DEBUG_SSH_PORT=
+
+##
+# Run as
+##
+ARG SSHUSERNAME=
+
+
+##
+# Directory of the application inside container
+##
+ARG APP_ROOT=
+
+
+FROM --platform=linux/${IMAGE_ARCH} \
+    commontorizon/debian:${BASE_VERSION} AS bluetooth-server
+
+
+ARG IMAGE_ARCH
+ARG DEBUG_SSH_PORT
+ARG SSHUSERNAME
+ARG APP_ROOT
+
+# SSH for remote debug
+EXPOSE ${DEBUG_SSH_PORT}
+EXPOSE 6512
+
+# Make sure we don't get notifications we can't answer during building.
+ENV DEBIAN_FRONTEND="noninteractive"
+
+# # Set working directory
+# WORKDIR ${APP_ROOT}
+
+# Install required packages
+RUN apt-get -q -y update && \
+    apt-get -q -y install \
+    openssl \
+    openssh-server \
+    rsync \
+    file \
+    screen \
+    python3-minimal \
+    python3-pip \
+    python3-setuptools \
+    python3-venv \
+    git:arm64 \
+    build-essential:arm64 \
+    cmake:arm64 \
+    net-tools:arm64 \
+    nano \
+    python3-dev \
+    bluez \
+    libbluetooth-dev \
+    && apt-get clean && apt-get autoremove && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy application files
+# COPY bluetooth-server/ ${APP_ROOT}/
+
+# CREATE VIRTUAL ENVIRONMENT ---------------------------------------------------
+RUN python3 -m venv ${APP_ROOT}/.venv
+
+# Install Python dependencies
+RUN set -ex && \
+    . ${APP_ROOT}/.venv/bin/activate && \
+    pip install --upgrade pip setuptools wheel && \
+    pip install PySide6 && pip install debugpy
+
+# CHANGE OWNERSHIP TO NON-ROOT USER --------------------------------------------
+RUN chown -R ${SSHUSERNAME}:${SSHUSERNAME} ${APP_ROOT}
+
+# Expose necessary ports (if any)
+# EXPOSE 8000  # Example port
+
+# Command to run the Bluetooth server application
+# CMD ["python3", "app.py"]
+CMD ["bash"]
