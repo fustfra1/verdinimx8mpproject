@@ -66,6 +66,7 @@ RUN apt-get -q -y update && \
 	    build-essential:arm64 \
 	    cmake:arm64 \
 	    net-tools:arm64 \
+	    iputils-ping:arm64 \
 	    v4l-utils:arm64 \
 	    ffmpeg:arm64 \
 	    nano:arm64 \

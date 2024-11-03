@@ -5,6 +5,7 @@
     "build-essential",
     "cmake",
     "net-tools",
+    "iputils-ping",
     "v4l-utils",
     "ffmpeg",
     "nano",

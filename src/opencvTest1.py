@@ -30,9 +30,11 @@ class FrameGrabber(threading.Thread):
                 print("Error: Failed to read frame from capture pipeline.")
                 self.stop()
                 break
+            # Crop the frame immediately after capturing
+            cropped_frame = crop_center(frame, self.shared_data['crop_width'], self.shared_data['crop_height'])
             with self.shared_data['lock']:
-                # Update the latest frame
-                self.shared_data['frame'] = frame.copy()
+                # Update the latest cropped frame
+                self.shared_data['frame'] = cropped_frame.copy()
 
     def stop(self):
         self.stopped = True
@@ -41,8 +43,8 @@ def main():
     # Original resolution
     original_width, original_height = 4032, 3040
 
-    # Crop dimensions (1/3 of original size)
-    crop_width, crop_height = original_width // 3, original_height // 3
+    # Crop dimensions (1/5 of original size)
+    crop_width, crop_height = original_width // 2, original_height // 2
 
     # Initialize frame count and timer for FPS calculation
     frame_count = 0
@@ -78,10 +80,12 @@ def main():
         cap.release()
         return
 
-    # Shared data structure with a lock
+    # Shared data structure with a lock and crop dimensions
     shared_data = {
         'frame': None,
-        'lock': threading.Lock()
+        'lock': threading.Lock(),
+        'crop_width': crop_width,
+        'crop_height': crop_height
     }
 
     # Initialize and start the frame grabbing thread
@@ -122,9 +126,9 @@ def main():
             binary = cv2.adaptiveThreshold(
                 blurred,
                 255,
-                cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                cv2.ADAPTIVE_THRESH_MEAN_C, #ADAPTIVE_THRESH_GAUSSIAN_C
                 cv2.THRESH_BINARY_INV,
-                51,  # Block size
+                51,  # Block size, must be odd
                 12   # Constant subtracted from mean
             )
 
@@ -148,7 +152,7 @@ def main():
                     if 0.7 < circularity < 1.2:  # Adjust thresholds as needed
                         filtered_contours.append(cnt)
 
-            # Create a copy of the original frame to draw detected blobs
+            # Create a copy of the frame to draw detected blobs
             output_frame = frame.copy()
 
             # Draw detected blobs on the output frame
@@ -162,22 +166,22 @@ def main():
                 # Optionally, draw the contour
                 cv2.drawContours(output_frame, [cnt], -1, (0, 0, 255), 2)
 
-            # Overlay FPS on the output frame
+            # Crop the output frame to the desired size
+            cropped_output_frame = crop_center(output_frame, crop_width, crop_height)
+
+            # Overlay FPS on the cropped output frame
             cv2.putText(
-                output_frame, 
+                cropped_output_frame, 
                 f'FPS: {fps:.2f}', 
-                (10, 30), 
+                (10, 30),  # Ensure this is within the cropped area
                 cv2.FONT_HERSHEY_SIMPLEX, 
                 1, 
                 (255, 0, 0), 
                 2
             )
 
-            # Crop the binary and output frames to 1/3 the size, centered
+            # Optionally, crop the binary image if you need to display it
             cropped_binary = crop_center(binary, crop_width, crop_height)
-            cropped_output_frame = crop_center(output_frame, crop_width, crop_height)
-
-            # Display the binary image and the processed frame with contours
             cv2.imshow('Binary Image (Cropped)', cropped_binary)
             cv2.imshow('Contours (Cropped)', cropped_output_frame)
 
