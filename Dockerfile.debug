@@ -7,7 +7,7 @@ ARG IMAGE_ARCH=
 ##
 # Base container version
 ##
-ARG BASE_VERSION=3.3.1-bookworm
+ARG BASE_VERSION=3
 
 ##
 # Debug port
@@ -27,7 +27,7 @@ ARG APP_ROOT=
 
 
 FROM --platform=linux/${IMAGE_ARCH} \
-    commontorizon/debian:${BASE_VERSION} AS debug
+    torizon/wayland-base-vivante:${BASE_VERSION} AS debug
 
 ARG IMAGE_ARCH
 ARG DEBUG_SSH_PORT
@@ -72,15 +72,15 @@ RUN apt-get -q -y update && \
 	    nano:arm64 \
 	    psmisc:arm64 \
 	    gpiod:arm64 \
-	    libgstreamer1.0-dev:arm64 \
-	    libgstreamer-plugins-base1.0-dev:arm64 \
-	    libgstreamer-plugins-bad1.0-dev:arm64 \
+	    libgstreamer1.0-0:arm64 \
+	    libgstreamer-plugins-base1.0-0:arm64 \
 	    gstreamer1.0-plugins-base:arm64 \
 	    gstreamer1.0-plugins-good:arm64 \
 	    gstreamer1.0-plugins-bad:arm64 \
 	    gstreamer1.0-plugins-ugly:arm64 \
 	    gstreamer1.0-libav:arm64 \
 	    gstreamer1.0-tools:arm64 \
+	    gstreamer1.0-gl:arm64 \
 	    i2c-tools:arm64 \
 	    python3-dev:arm64 \
 	    libdrm2:arm64 \
