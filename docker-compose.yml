@@ -79,6 +79,7 @@ services:
       - ACCEPT_FSL_EULA=1
       - XDG_RUNTIME_DIR=/tmp/1000-runtime-dir
       - DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket
+      - MACHINE=verdin-imx8mp
     depends_on:
       - weston
       - bluetooth-server
@@ -124,6 +125,19 @@ services:
       - "c 81:* rmw"
       - "c 89:* rmw"
       - "c 254:* rmw" # GPIO
+      - "c 234:0 rmw"
+      # ... for /dev/mxc_hantro on verdin-imx8mm and verdin-imx8mp
+      - "c 235:0 rmw"
+      # ... for /dev/dma_heap/linux,cma
+      - "c 253:1 rmw"
+      # ... for /dev/dma_heap/linux,cma-uncached
+      - "c 253:2 rmw"
+      # ... for /dev/media*
+      - "c 251:* rmw"
+      # ... for /dev/urandom
+      - "c 1:9 rmw"
+      # ... for /dev/null
+      - "c 1:3 rmw"
     # init: true
 
   secondmipivc:
