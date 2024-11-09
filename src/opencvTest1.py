@@ -45,6 +45,8 @@ def main():
 
     # Crop dimensions (1/5 of original size)
     crop_width, crop_height = original_width // 2, original_height // 2
+    crop_width = 1920
+    crop_height = 1080
 
     # Initialize frame count and timer for FPS calculation
     frame_count = 0
@@ -59,13 +61,26 @@ def main():
         'appsink'
     )
 
-    # GStreamer pipeline for displaying frames
+    # # GStreamer pipeline for displaying frames
+    # display_pipeline = (
+    #     'appsrc ! '
+    #     f'video/x-raw,format=BGR,width={crop_width},height={crop_height} ! '
+    #     'videoconvert ! '
+    #     'waylandsink'
+    # )
+    # GStreamer pipeline for streaming frames:
+    # gst-launch-1.0 v4l2src device=/dev/video2 ! videorate ! video/x-raw,width=1920,height=1080 ! videoconvert ! vpuenc_h264 ! rtph264pay config-interval=1 pt=96 ! udpsink host=192.168.99.96 port=5000
     display_pipeline = (
         'appsrc ! '
-        f'video/x-raw,format=BGR,width={crop_width},height={crop_height} ! '
+        'videorate ! '
+        'video/x-raw,format=BGR,width=1920,height=1080,framerate=1/1 ! '
         'videoconvert ! '
-        'waylandsink'
+        'vpuenc_h264 ! rtph264pay config-interval=1 pt=96 ! '
+        'udpsink host=192.168.99.96 port=5000'
     )
+
+
+
 
     # OpenCV VideoCapture for capturing frames
     cap = cv2.VideoCapture(capture_pipeline, cv2.CAP_GSTREAMER)
@@ -74,7 +89,7 @@ def main():
         return
 
     # OpenCV VideoWriter for displaying frames
-    out = cv2.VideoWriter(display_pipeline, cv2.CAP_GSTREAMER, 0, 30, (crop_width, crop_height), True)
+    out = cv2.VideoWriter(display_pipeline, cv2.CAP_GSTREAMER, 0, 1, (crop_width, crop_height), True)
     if not out.isOpened():
         print("Error: Unable to open display pipeline.")
         cap.release()
@@ -182,8 +197,8 @@ def main():
 
             # Optionally, crop the binary image if you need to display it
             cropped_binary = crop_center(binary, crop_width, crop_height)
-            cv2.imshow('Binary Image (Cropped)', cropped_binary)
-            cv2.imshow('Contours (Cropped)', cropped_output_frame)
+            # cv2.imshow('Binary Image (Cropped)', cropped_binary)
+            # cv2.imshow('Contours (Cropped)', cropped_output_frame)
 
             # Write the cropped output frame to the display pipeline
             out.write(cropped_output_frame)
