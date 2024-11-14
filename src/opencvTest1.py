@@ -53,13 +53,18 @@ def main():
     start_time = time.time()
     fps = 0
 
-    # GStreamer pipeline for capturing frames
-    capture_pipeline = (
-        f'v4l2src device=/dev/video2 ! '
-        f'video/x-raw,format=YUY2,width={original_width},height={original_height} ! '
-        'videoconvert ! '
-        'appsink'
-    )
+    # # GStreamer pipeline for capturing frames
+    # capture_pipeline = (
+    #     f'v4l2src device=/dev/video2 ! '
+    #     f'video/x-raw,format=YUY2,width={original_width},height={original_height} ! '
+    #     'videoconvert ! '
+    #     'appsink'
+    # )
+
+    # gst_pipeline = "v4l2src device=/dev/video2 ! video/x-raw,format=YUY2,width=4032,height=3040,framerate=5/1 ! imxvideoconvert_g2d ! appsink"
+    capture_pipeline = f"v4l2src device=/dev/video2 ! video/x-raw,format=YUY2,width={crop_width},height={crop_height},framerate=5/1 ! imxvideoconvert_g2d ! appsink"
+
+
 
     # # GStreamer pipeline for displaying frames
     # display_pipeline = (
@@ -199,6 +204,19 @@ def main():
             cropped_binary = crop_center(binary, crop_width, crop_height)
             # cv2.imshow('Binary Image (Cropped)', cropped_binary)
             # cv2.imshow('Contours (Cropped)', cropped_output_frame)
+
+            # Ensure the frame has the correct data type
+            if cropped_output_frame.dtype != np.uint8:
+                cropped_output_frame = cropped_output_frame.astype(np.uint8)
+
+            # Ensure the frame has 3 channels
+            if len(cropped_output_frame.shape) == 2:
+                cropped_output_frame = cv2.cvtColor(cropped_output_frame, cv2.COLOR_GRAY2BGR)
+            elif cropped_output_frame.shape[2] == 1:
+                cropped_output_frame = cv2.cvtColor(cropped_output_frame, cv2.COLOR_GRAY2BGR)
+            elif cropped_output_frame.shape[2] == 4:
+                cropped_output_frame = cv2.cvtColor(cropped_output_frame, cv2.COLOR_RGBA2BGR)
+
 
             # Write the cropped output frame to the display pipeline
             out.write(cropped_output_frame)

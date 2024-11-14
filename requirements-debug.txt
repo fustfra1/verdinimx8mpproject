@@ -1,3 +1,4 @@
 debugpy
 pycairo 
 PyGObject
+gpiod
