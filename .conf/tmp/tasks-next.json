@@ -8,14 +8,14 @@
             "command": "echo",
             "type": "process",
             "args": [
-                "venv",
                 "ok"
             ],
             "problemMatcher": "$msCompile",
             "dependsOrder": "sequence",
             "dependsOn": [
                 "create-venv",
-                "host-install-pip-requirements"
+                "host-install-pip-requirements",
+                "wait-a-bit"
             ],
             "runOptions": {
                 "runOn": "folderOpen"
@@ -25,9 +25,9 @@
                 "color": "terminal.ansiCyan"
             },
             "presentation": {
-                "echo": true,
+                "echo": false,
                 "reveal": "silent",
-                "focus": true,
+                "focus": false,
                 "panel": "shared",
                 "group": "python-related"
             }
@@ -50,7 +50,7 @@
             "presentation": {
                 "echo": true,
                 "reveal": "silent",
-                "focus": true,
+                "focus": false,
                 "panel": "shared",
                 "group": "python-related"
             }
@@ -335,7 +335,7 @@
         {
             "label": "host-install-pip-requirements",
             "detail": "Install pip requirements on the host",
-            "command": "${config:python.defaultInterpreterPath}",
+            "command": "${command:python.interpreterPath}",
             "type": "process",
             "args": [
                 "-m",
@@ -353,7 +353,7 @@
             "presentation": {
                 "echo": true,
                 "reveal": "silent",
-                "focus": true,
+                "focus": false,
                 "panel": "shared",
                 "group": "python-related"
             }
@@ -361,7 +361,7 @@
         {
             "label": "host-upgrade-pip",
             "detail": "Upgrade pip in the host",
-            "command": "${config:python.defaultInterpreterPath}",
+            "command": "${command:python.interpreterPath}",
             "type": "process",
             "args": [
                 "-m",
@@ -378,7 +378,7 @@
             "presentation": {
                 "echo": true,
                 "reveal": "silent",
-                "focus": true,
+                "focus": false,
                 "panel": "shared",
                 "group": "python-related"
             }
@@ -528,7 +528,7 @@
                     "DOCKER_TAG": "${command:docker_tag}",
                     "TCB_CLIENTID": "${command:tcb.clientId}",
                     "TCB_CLIENTSECRET": "${command:tcb.clientSecret}",
-                    "TCB_PACKAGE": "secondmipivc",
+                    "TCB_PACKAGE": "verdinimx8mpproject",
                     "TCB_FLEET": "${command:tcb.fleetName}",
                     "TORIZON_ARCH": "${command:torizon_arch}"
                 }
@@ -579,7 +579,7 @@
                 "update",
                 "fleet",
                 "latest",
-                "secondmipivc",
+                "verdinimx8mpproject",
                 "${command:tcb.fleetName}"
             ],
             "problemMatcher": [
@@ -610,7 +610,7 @@
                     "DOCKER_PSSWD": "${command:docker_password}",
                     "DOCKER_LOGIN": "${command:docker_login}",
                     "DOCKER_REGISTRY": "${command:docker_registry}",
-                    "VSCODE_CMD": "--verbose platform push --credentials credentials.zip --package-name secondmipivc --package-version ${command:tcb.getNextPackageVersion} --login-to $DOCKER_REGISTRY $DOCKER_LOGIN $DOCKER_PSSWD --canonicalize docker-compose.prod.yml"
+                    "VSCODE_CMD": "--verbose platform push --credentials credentials.zip --package-name verdinimx8mpproject --package-version ${command:tcb.getNextPackageVersion} --login-to $DOCKER_REGISTRY $DOCKER_LOGIN $DOCKER_PSSWD --canonicalize docker-compose.prod.yml"
                 }
             },
             "args": [
@@ -832,25 +832,7 @@
             }
         },
         {
-            "label": "reload-vscode-window",
-            "detail": "Reloads this VSCode window (workspace)",
-            "command": "${command:workbench.action.reloadWindow}",
-            "type": "process",
-        "args": [],
-            "dependsOrder": "sequence",
-            "icon": {
-                "id": "refresh",
-                "color": "terminal.ansiCyan"
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "silent",
-                "focus": false,
-                "panel": "dedicated"
-            }
-        },
-        {
-            "label": "apply-torizon-packages-arm64",
+            "label": "apply-torizon-packages",
             "detail": "",
             "hide": true,
             "command": "pwsh",
@@ -858,79 +840,7 @@
             "args": [
                 "-nop",
                 "${workspaceFolder}/.conf/torizonPackages.ps1",
-                "arm64"
-            ],
-            "dependsOrder": "sequence",
-            "icon": {
-                "id": "gear",
-                "color": "terminal.ansiYellow"
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "group": "build-execution"
-            }
-        },
-        {
-            "label": "apply-torizon-packages-arm",
-            "detail": "",
-            "hide": true,
-            "command": "pwsh",
-            "type": "process",
-            "args": [
-                "-nop",
-                "${workspaceFolder}/.conf/torizonPackages.ps1",
-                "armhf"
-            ],
-            "dependsOrder": "sequence",
-            "icon": {
-                "id": "gear",
-                "color": "terminal.ansiYellow"
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "group": "build-execution"
-            }
-        },
-        {
-            "label": "apply-torizon-packages-amd64",
-            "detail": "",
-            "hide": true,
-            "command": "pwsh",
-            "type": "process",
-            "args": [
-                "-nop",
-                "${workspaceFolder}/.conf/torizonPackages.ps1",
-                "amd64"
-            ],
-            "dependsOrder": "sequence",
-            "icon": {
-                "id": "gear",
-                "color": "terminal.ansiYellow"
-            },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": true,
-                "panel": "shared",
-                "group": "build-execution"
-            }
-        },
-        {
-            "label": "apply-torizon-packages-riscv64",
-            "detail": "",
-            "hide": true,
-            "command": "pwsh",
-            "type": "process",
-            "args": [
-                "-nop",
-                "${workspaceFolder}/.conf/torizonPackages.ps1",
-                "riscv"
+                "${config:torizon_arch}"
             ],
             "dependsOrder": "sequence",
             "icon": {
@@ -1173,6 +1083,8 @@
                 "DOCKER_HOST=${config:torizon_ip}:2375",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "-p",
                 "torizon",
                 "down",
@@ -1206,6 +1118,8 @@
             "type": "shell",
             "args": [
                 "compose",
+                "--ansi",
+                "never",
                 "-p",
                 "torizon",
                 "stop",
@@ -1214,6 +1128,8 @@
                 "&&",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "-p",
                 "torizon",
                 "rm",
@@ -1286,6 +1202,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "build",
                 "--pull",
                 "--build-arg",
@@ -1302,7 +1220,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-arm64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": "$msCompile",
             "icon": {
@@ -1337,6 +1255,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "build",
                 "--pull",
                 "--build-arg",
@@ -1353,7 +1273,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-arm"
+                "apply-torizon-packages"
             ],
             "problemMatcher": "$msCompile",
             "icon": {
@@ -1388,6 +1308,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "build",
                 "--pull",
                 "--build-arg",
@@ -1404,7 +1326,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-amd64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": "$msCompile",
             "icon": {
@@ -1439,6 +1361,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "build",
                 "--pull",
                 "--build-arg",
@@ -1455,7 +1379,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-riscv64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": "$msCompile",
             "icon": {
@@ -1479,6 +1403,7 @@
             "args": [
                 "docker",
                 "build",
+                "--progress=plain",
                 "--pull",
                 "-f",
                 "${workspaceFolder}/Dockerfile.sdk",
@@ -1494,7 +1419,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-arm64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": [
                 "$gcc"
@@ -1520,6 +1445,7 @@
             "args": [
                 "docker",
                 "build",
+                "--progress=plain",
                 "--pull",
                 "-f",
                 "${workspaceFolder}/Dockerfile.sdk",
@@ -1529,13 +1455,11 @@
                 "--build-arg",
                 "IMAGE_ARCH=arm",
                 "--build-arg",
-                "GPU=${config:torizon_gpu}",
-                "--build-arg",
                 "APP_ROOT=${config:torizon_app_root}"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-arm"
+                "apply-torizon-packages"
             ],
             "problemMatcher": [
                 "$gcc"
@@ -1561,6 +1485,7 @@
             "args": [
                 "docker",
                 "build",
+                "--progress=plain",
                 "--pull",
                 "-f",
                 "${workspaceFolder}/Dockerfile.sdk",
@@ -1570,13 +1495,11 @@
                 "--build-arg",
                 "IMAGE_ARCH=amd64",
                 "--build-arg",
-                "GPU=${config:torizon_gpu}",
-                "--build-arg",
                 "APP_ROOT=${config:torizon_app_root}"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-amd64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": [
                 "$gcc"
@@ -1602,6 +1525,7 @@
             "args": [
                 "docker",
                 "build",
+                "--progress=plain",
                 "--pull",
                 "-f",
                 "${workspaceFolder}/Dockerfile.sdk",
@@ -1611,13 +1535,11 @@
                 "--build-arg",
                 "IMAGE_ARCH=riscv64",
                 "--build-arg",
-                "GPU=${config:torizon_gpu}",
-                "--build-arg",
                 "APP_ROOT=${config:torizon_app_root}"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-riscv64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": [
                 "$gcc"
@@ -1654,6 +1576,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "push",
                 "secondmipivc-debug"
             ],
@@ -1691,6 +1615,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "push",
                 "secondmipivc-debug"
             ],
@@ -1728,6 +1654,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "push",
                 "secondmipivc-debug"
             ],
@@ -1765,6 +1693,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "push",
                 "secondmipivc-debug"
             ],
@@ -1798,6 +1728,8 @@
                 "DEBUG_PORT3=${config:torizon_debug_port3}",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "pull",
                 "secondmipivc-debug"
             ],
@@ -1834,6 +1766,8 @@
                 "DEBUG_PORT3=${config:torizon_debug_port3}",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "pull",
                 "secondmipivc-debug"
             ],
@@ -1870,6 +1804,8 @@
                 "DEBUG_PORT3=${config:torizon_debug_port3}",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "pull",
                 "secondmipivc-debug"
             ],
@@ -1906,6 +1842,8 @@
                 "DEBUG_PORT3=${config:torizon_debug_port3}",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "pull",
                 "secondmipivc-debug"
             ],
@@ -2102,6 +2040,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "build",
                 "--pull",
                 "--build-arg",
@@ -2116,7 +2056,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-arm64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": "$msCompile",
             "icon": {
@@ -2151,6 +2091,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "build",
                 "--pull",
                 "--build-arg",
@@ -2165,7 +2107,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-arm"
+                "apply-torizon-packages"
             ],
             "problemMatcher": "$msCompile",
             "icon": {
@@ -2200,6 +2142,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "build",
                 "--pull",
                 "--build-arg",
@@ -2214,7 +2158,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-amd64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": "$msCompile",
             "icon": {
@@ -2249,6 +2193,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "build",
                 "--pull",
                 "--build-arg",
@@ -2263,7 +2209,7 @@
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
-                "apply-torizon-packages-riscv64"
+                "apply-torizon-packages"
             ],
             "problemMatcher": "$msCompile",
             "icon": {
@@ -2297,6 +2243,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "push",
                 "secondmipivc"
             ],
@@ -2336,6 +2284,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "push",
                 "secondmipivc"
             ],
@@ -2375,6 +2325,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "push",
                 "secondmipivc"
             ],
@@ -2414,6 +2366,8 @@
             "args": [
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "push",
                 "secondmipivc"
             ],
@@ -2451,6 +2405,8 @@
                 "DEBUG_PORT3=${config:torizon_debug_port3}",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "pull",
                 "secondmipivc"
             ],
@@ -2488,6 +2444,8 @@
                 "DEBUG_PORT3=${config:torizon_debug_port3}",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "pull",
                 "secondmipivc"
             ],
@@ -2525,6 +2483,8 @@
                 "DEBUG_PORT3=${config:torizon_debug_port3}",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "pull",
                 "secondmipivc"
             ],
@@ -2562,6 +2522,8 @@
                 "DEBUG_PORT3=${config:torizon_debug_port3}",
                 "docker",
                 "compose",
+                "--ansi",
+                "never",
                 "pull",
                 "secondmipivc"
             ],
@@ -2791,7 +2753,7 @@
                     "DOCKER_TAG": "${command:docker_tag}",
                     "TCB_CLIENTID": "${command:tcb.clientId}",
                     "TCB_CLIENTSECRET": "${command:tcb.clientSecret}",
-                    "TCB_PACKAGE": "secondmipivc",
+                    "TCB_PACKAGE": "verdinimx8mpproject",
                     "TCB_FLEET": "${command:tcb.fleetName}",
                     "TORIZON_ARCH": "${command:torizon_arch}"
                 }

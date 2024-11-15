@@ -1287,6 +1287,7 @@
                 "docker",
                 "compose",
                 "build",
+                // "--no-cache",
                 "--pull",
                 "--build-arg",
                 "SSHUSERNAME=${config:torizon_run_as}",

@@ -195,11 +195,6 @@ Copy-Item `
     $Env:HOME/.apollox/scripts/validateDepsRunning.ps1 `
     $projectFolder/.conf/validateDepsRunning.ps1
 
-# TORIZONPACKAGES.PS1:
-Copy-Item `
-    $Env:HOME/.apollox/scripts/torizonPackages.ps1 `
-    $projectFolder/.conf/torizonPackages.ps1
-
 Write-Host -ForegroundColor DarkGreen "✅ always accept new"
 # ----------------------------------------------------------- ALWAYS ACCEPT NEW
 
@@ -306,10 +301,7 @@ $_deps = Get-Content  ./deps.json | ConvertFrom-Json
 
 # If there are installation scripts listed on the .conf/deps.json of the template
 if (($_deps.installDepsScripts.Count -gt 0)) {
-    # Create the installDepsScripts dir on the .conf dir and on the tmp/.conf dir
-    if (-not (Test-Path -Path $projectFolder/.conf/installDepsScripts )){
-        New-Item -ItemType Directory -Path $projectFolder/.conf/installDepsScripts
-    }
+    # Create the installDepsScripts dir on the .conf/tmp dir
     if (-not (Test-Path -Path ./installDepsScripts )){
         New-Item -ItemType Directory -Path ./installDepsScripts
     }
@@ -323,12 +315,12 @@ if (($_deps.installDepsScripts.Count -gt 0)) {
             $script -match  ".conf/installDepsScripts") {
             # Copy the script from the scripts/installDepsScripts folder to the .conf/installDepsScripts folder of the template
             $scriptSource = $script.Replace(".conf","scripts")
+            $scriptDest = $script.Replace(".conf/","")
+            Copy-Item $Env:HOME/.apollox/$scriptSource ./$scriptDest
         } else {
-            $scriptSource = "$templateName/$script"
+            $scriptDest = $script.Replace(".conf/","")
+            Copy-Item $Env:HOME/.apollox/$templateName/$script ./$scriptDest
         }
-
-        $scriptDest = $script.Replace(".conf/","")
-        Copy-Item $Env:HOME/.apollox/$scriptSource ./$scriptDest
     }
 }
 

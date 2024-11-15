@@ -252,15 +252,15 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
 # Install required packages
 RUN apt-get -q -y update && \
     apt-get -q -y install \
-    openssl \
-    openssh-server \
-    rsync \
-    file \
-    screen \
-    python3-minimal \
-    python3-pip \
-    python3-setuptools \
-    python3-venv \
+    openssl:arm64 \
+    openssh-server:arm64 \
+    rsync:arm64 \
+    file:arm64 \
+    screen:arm64 \
+    python3-minimal:arm64 \
+    python3-pip:arm64 \
+    python3-setuptools:arm64 \
+    python3-venv:arm64 \
     && apt-get clean && apt-get autoremove && \
     rm -rf /var/lib/apt/lists/*
 
@@ -288,6 +288,7 @@ RUN apt-get -q -y update && \
 	    libjsoncpp-dev:arm64 \
 	    libcairo2-dev:arm64 \
 	    libgirepository1.0-dev:arm64 \
+	    libglib2.0-dev:arm64 \
 	    pkg-config:arm64 \
     # __torizon_packages_dev_end__
 # DO NOT REMOVE THIS LABEL: this is used for VS Code automation

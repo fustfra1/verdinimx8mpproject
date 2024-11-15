@@ -14,7 +14,7 @@
   "wait_sync": "1",
   "torizon_run_as": "torizon",
   "torizon_app_root": "/home/torizon/app",
-  "tcb.packageName": "secondmipivc",
+  "tcb.packageName": "verdinimx8mpproject",
   "tcb.version": "3.11.0",
   "torizon.gpuPrefixRC": true,
   "python.defaultInterpreterPath": "./.venv/bin/python3"

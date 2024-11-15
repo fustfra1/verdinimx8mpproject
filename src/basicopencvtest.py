@@ -19,7 +19,7 @@ def main():
         'video/x-raw,format=BGR,width=1920,height=1080,framerate=5/1 ! '  # Changed framerate to 5/1
         'videoconvert ! '
         'vpuenc_h264 ! rtph264pay config-interval=1 pt=96 ! '
-        'udpsink host=192.168.99.96 port=5000'
+        'udpsink host=192.168.99.21 port=5000'
     )
 
     cap = cv2.VideoCapture(capture_pipeline, cv2.CAP_GSTREAMER)
