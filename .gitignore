@@ -1,6 +1,7 @@
 # ffu
 .container
-
+# Ignore all files in the conf folder
+conf/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
