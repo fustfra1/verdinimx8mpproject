@@ -57,7 +57,7 @@ RUN echo "Acquire::Check-Valid-Until false;" \
     | tee -a /etc/apt/apt.conf.d/10-nocheckvalid
 
 # Version pin packages that have a versioned dependency on GStreamer packages
-COPY version-pinned-packages /etc/apt/preferences.d/version-pinned-packages
+COPY version-pinned-packages /etc/apt/preferences.d/version-pinned-packages.pref
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt-get update && apt-get install -y \
     imx-gpu-viv-wayland-dev \
@@ -217,7 +217,7 @@ RUN echo "Acquire::Check-Valid-Until false;" \
     | tee -a /etc/apt/apt.conf.d/10-nocheckvalid
 
 # Version pin packages that have a versioned dependency on GStreamer packages
-COPY version-pinned-packages  /etc/apt/preferences.d/version-pinned-packages
+COPY version-pinned-packages  /etc/apt/preferences.d/version-pinned-packages.pref
 
 # Copy the downstream binaries
 COPY --from=Base /vpusysroot/usr/lib/* /usr/lib/
@@ -288,7 +288,6 @@ RUN apt-get -q -y update && \
 	    libjsoncpp-dev:arm64 \
 	    libcairo2-dev:arm64 \
 	    libgirepository1.0-dev:arm64 \
-	    libglib2.0-dev:arm64 \
 	    pkg-config:arm64 \
     # __torizon_packages_dev_end__
 # DO NOT REMOVE THIS LABEL: this is used for VS Code automation

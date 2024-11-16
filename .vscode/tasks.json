@@ -1300,7 +1300,7 @@
                 "--build-arg",
                 "GPU=${config:torizon_gpu}",
                 "secondmipivc-debug",
-                "bluetooth-server"
+                // "bluetooth-server"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -1695,7 +1695,7 @@
                 "compose",
                 "push",
                 "secondmipivc-debug",
-                "bluetooth-server"
+                // "bluetooth-server"
             ],
             "dependsOrder": "sequence",
             "problemMatcher": "$msCompile",
@@ -1803,7 +1803,7 @@
                 "compose",
                 "pull",
                 "secondmipivc-debug",
-                "bluetooth-server"
+                // "bluetooth-server"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -1951,7 +1951,7 @@
                 "up",
                 "-d",
                 "secondmipivc-debug",
-                "bluetooth-server"
+                // "bluetooth-server"
             ],
             "dependsOrder": "sequence",
             "dependsOn": [

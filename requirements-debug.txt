@@ -1,4 +1,4 @@
-debugpy
-pycairo>=1.21.0,<1.23.0
-PyGObject>=3.44.0,<3.46.0
-gpiod
+debugpy==1.8.8
+pycairo==1.27.0
+PyGObject==3.50.0
+gpiod==2.2.1

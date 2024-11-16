@@ -20,7 +20,6 @@
     "libjsoncpp-dev",
     "libcairo2-dev",
     "libgirepository1.0-dev",
-    "libglib2.0-dev",
     "pkg-config"
   ]
 }
